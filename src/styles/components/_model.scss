@@ -1,0 +1,26 @@
+.model {
+  margin-top: 2rem;
+  width: 100%;
+  padding: 0rem 2rem;
+  border-radius: 0.3rem;
+  border: 1px solid #ccc;
+  background: #fff;
+  font-weight: 400;
+  &__text {
+    font-size: $model-text-font-size;
+    line-height: calc(#{$model-text-font-size} * 1.4);
+  }
+  &__char {
+    // background-color: greenyellow;
+    // display: inline-block;
+
+    &--curr {
+      background-color: rgba(144, 238, 144, 0.8);
+      color: inherit;
+    }
+    &--err {
+      background-color: rgba(255, 0, 0, 0.45);
+      color: white;
+    }
+  }
+}
