@@ -14,6 +14,9 @@
     // background-color: greenyellow;
     // display: inline-block;
 
+    &--typing-done {
+      color: rgba(153, 153, 153, 0.253);
+    }
     &--curr {
       background-color: rgba(144, 238, 144, 0.8);
       color: inherit;
@@ -21,6 +24,10 @@
     &--err {
       background-color: rgba(255, 0, 0, 0.45);
       color: white;
+
+      &.model__char--typing-done:not(.model__char--curr) {
+        opacity: 0.5;
+      }
     }
   }
 }

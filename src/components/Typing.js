@@ -1,27 +1,43 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { setTypingText } from '../action/model';
+import {
+  startSetTypingStarted,
+  startSetTypingText,
+  startSetAccuracy,
+  startSetTypingFinished,
+  startResetAll
+} from '../actions/model';
 
-const Typing = ({ dispatch, model }) => {
+const Typing = props => {
   const textChanged = e => {
-    const typedText = e.target.value;
-    let indexOfLastChange;
-    let change;
-    let mistake = null;
+    if (!props.model.typingFinished) {
+      const typedText = e.target.value;
 
-    for (let i = 0, len = typedText.length; i < len; i++) {
-      if (model.typedText[i] !== typedText[i]) {
-        change = typedText[i];
-        indexOfLastChange = i;
-        break;
+      if (!props.model.typingStarted) {
+        props.startSetTypingStarted();
+      }
+
+      props.startSetTypingText(typedText, props.model);
+      props.startSetAccuracy();
+    }
+  };
+
+  const onKeyDown = e => {
+    if (e.keyCode === 27) {
+      props.startResetAll();
+    }
+
+    if (props.model.typedText.length >= props.model.modelTextArr.length) {
+      if (e.keyCode === 13) {
+        console.log('typing finished');
+        props.startSetTypingFinished();
+      }
+
+      if (props.model.errIndices.length === 0) {
+        props.startSetTypingFinished();
+        console.log('typing finished');
       }
     }
-
-    if (typedText.length > model.typedText.length && change) {
-      mistake = change !== model.modelTextArr[indexOfLastChange];
-    }
-
-    dispatch(setTypingText(typedText, mistake));
   };
   return (
     <div className="typing">
@@ -30,11 +46,37 @@ const Typing = ({ dispatch, model }) => {
         type="text"
         name="userText"
         id="userText"
-        rows="15"
+        rows="8"
         onChange={textChanged}
+        onKeyDown={onKeyDown}
+        autoFocus={true}
+        value={props.model.typedText}
       />
     </div>
   );
 };
 
-export default connect(state => state)(Typing);
+const mapDispatchToProps = dispatch => {
+  return {
+    startSetTypingStarted: () => {
+      return dispatch(startSetTypingStarted());
+    },
+    startSetTypingText: (typedText, model) => {
+      return dispatch(startSetTypingText(typedText, model));
+    },
+    startSetAccuracy: () => {
+      return dispatch(startSetAccuracy());
+    },
+    startSetTypingFinished: () => {
+      return dispatch(startSetTypingFinished());
+    },
+    startResetAll: () => {
+      return dispatch(startResetAll());
+    }
+  };
+};
+
+export default connect(
+  state => state,
+  mapDispatchToProps
+)(Typing);

@@ -15,7 +15,9 @@ const Model = ({ model }) => {
             model.currWordsIndices && model.currWordsIndices.includes(i)
               ? ' model__char--curr'
               : '';
-          const className = main + curr + err;
+          let typingDone =
+            i < model.typedText.length ? ' model__char--typing-done' : '';
+          const className = main + curr + err + typingDone;
 
           return (
             <span className={className} key={char + i}>
