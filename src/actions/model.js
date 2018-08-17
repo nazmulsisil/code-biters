@@ -34,11 +34,17 @@ export const setTypingText = (
   const isStroke = prevTypedText.length <= typedText.length;
 
   // if stroke happened, loop through modelTextArr to see if the char is equal to the changed char(the char that is not equal to prevTypedText)
+  let targetChar;
+
   const isCorrectStroke = !!(isStroke
     ? modelTextArr.find((char, i) => {
-        return typedText[i] !== prevTypedText[i]
-          ? typedText[i] === char
-          : false;
+        // at which INDEX position the change was detected, and that is the target character
+        if (typedText[i] !== prevTypedText[i]) {
+          targetChar = char;
+          // isCorrectStroke?
+          return typedText[i] === targetChar;
+        }
+        return false;
       })
     : null);
 
@@ -69,6 +75,23 @@ export const setTypingText = (
   const netSpeed = calcWPM(preNetSpeed) * multiplier;
   ////////////////////////////////
 
+  /////////////working code
+  // let char;
+  // if (targetChar) {
+  //   char = {
+  //     code: targetChar.charCodeAt(0),
+  //     isCorrect: !!isCorrectStroke
+  //   };
+  // }
+  /////////////working code
+
+  const char = targetChar
+    ? {
+        code: targetChar.charCodeAt(0),
+        isCorrect: !!isCorrectStroke
+      }
+    : undefined;
+
   return {
     type: 'SET_TYPING_TEXT',
     typedText,
@@ -77,7 +100,8 @@ export const setTypingText = (
     isCorrectStroke,
     timeTakenForCorrectStroke,
     timeTakenForWrongStroke,
-    netSpeed
+    netSpeed,
+    char
   };
 };
 

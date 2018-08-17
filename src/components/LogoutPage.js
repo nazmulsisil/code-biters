@@ -13,7 +13,6 @@ export const LogoutPage = props => {
 const mapDispatchToProps = dispatch => {
   return {
     startLogout: () => {
-      console.log('try logout');
       dispatch(startLogout());
     }
   };

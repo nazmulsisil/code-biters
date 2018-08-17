@@ -35,5 +35,8 @@
     "webpack": "^4.16.4",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.5"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-es2015-computed-properties": "^6.24.1"
   }
 }

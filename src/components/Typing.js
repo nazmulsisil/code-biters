@@ -7,6 +7,7 @@ import {
   startSetTypingFinished,
   startResetAll
 } from '../actions/model';
+import { startSetFinishedResult } from '../actions/result';
 
 const Typing = props => {
   const textChanged = e => {
@@ -28,14 +29,9 @@ const Typing = props => {
     }
 
     if (props.model.typedText.length >= props.model.modelTextArr.length) {
-      if (e.keyCode === 13) {
-        console.log('typing finished');
+      if (e.keyCode === 13 || props.model.errIndices.length === 0) {
         props.startSetTypingFinished();
-      }
-
-      if (props.model.errIndices.length === 0) {
-        props.startSetTypingFinished();
-        console.log('typing finished');
+        props.startSetFinishedResult(props.model);
       }
     }
   };
@@ -72,6 +68,9 @@ const mapDispatchToProps = dispatch => {
     },
     startResetAll: () => {
       return dispatch(startResetAll());
+    },
+    startSetFinishedResult: modelState => {
+      return dispatch(startSetFinishedResult(modelState));
     }
   };
 };

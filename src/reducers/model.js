@@ -16,7 +16,8 @@ const modelsDefaultState = {
   correctStrokeTimeArr: [],
   wrongStrokeTimeArr: [],
   netSpeed: 0,
-  accuracy: 0
+  accuracy: 0,
+  charStat: {}
 };
 
 const modelReducer = (state = modelsDefaultState, action) => {
@@ -37,7 +38,8 @@ const modelReducer = (state = modelsDefaultState, action) => {
         correctStrokeTimeArr: [],
         wrongStrokeTimeArr: [],
         netSpeed: 0,
-        accuracy: 0
+        accuracy: 0,
+        charStat: {}
       };
 
     case 'SET_MODEL_TEXT':
@@ -74,8 +76,33 @@ const modelReducer = (state = modelsDefaultState, action) => {
           ...state.wrongStrokeTimeArr,
           action.timeTakenForWrongStroke
         ].filter(Boolean),
-        netSpeed: action.netSpeed
+        netSpeed: action.netSpeed,
+        charStat: action.char
+          ? {
+              ...state.charStat,
+              [action.char.code]: {
+                correct: state.charStat[action.char.code]
+                  ? action.char.isCorrect
+                    ? state.charStat[action.char.code]['correct'] + 1
+                    : state.charStat[action.char.code]['correct']
+                  : action.char.isCorrect
+                    ? 1
+                    : 0,
+                wrong: state.charStat[action.char.code]
+                  ? action.char.isCorrect
+                    ? state.charStat[action.char.code]['wrong']
+                    : state.charStat[action.char.code]['wrong'] + 1
+                  : action.char.isCorrect
+                    ? 0
+                    : 1
+              }
+            }
+          : state.charStat
       };
+
+    // state.charStat[action.char.code]
+    //   ? [...state.charStat[action.char.code], action.char.isCorrect]
+    //   : Array.of(action.char.isCorrect)
 
     case 'SET_ACCURACY':
       return {

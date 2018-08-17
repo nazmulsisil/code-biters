@@ -13,7 +13,6 @@ export const LoginPage = props => {
 const mapDispatchToProps = dispatch => {
   return {
     startLogin: () => {
-      console.log('try login');
       dispatch(startLogin());
     }
   };
